@@ -1,15 +1,22 @@
 import Head from 'next/head';
-
 import Image from "next/image";
+import { GetServerSideProps } from 'next';
 
 import logoImg from '../assets/logo.svg';
 import checkImg from '../assets/check.svg';
 import avatarsImg from '../assets/avatars.png';
 import devicesImg from '../assets/devices.png';
+import { api } from '../services/api';
 
-export default function Home() {
+interface HomeProps {
+	usersCount: number;
+	guessesCount: number;
+	poolsCount: number;
+}
+
+export default function Home(props: HomeProps) {
 	return (
-		<div>
+		<>
 			<Head>
 				<title>nlw COPA</title>
 			</Head>
@@ -22,7 +29,7 @@ export default function Home() {
 					<div className='flex items-center gap-2'>
 						<Image src={avatarsImg} alt="Users avatars" quality={100} />
 						<strong className='text-gray-100 text-xl'>
-							<span className='text-green-300'>+12.487</span> pessoas já estão usando
+							<span className='text-green-300'>+{props.usersCount}</span> pessoas já estão usando
 						</strong>
 					</div>
 
@@ -45,7 +52,7 @@ export default function Home() {
 						<div className='flex gap-6'>
 							<Image src={checkImg} alt="Check image" />
 							<div className='text-white'>
-								<strong className='text-2xl'>+398</strong>
+								<strong className='text-2xl'>+{props.poolsCount}</strong>
 								<p>Bolões criados</p>
 							</div>
 						</div>
@@ -55,7 +62,7 @@ export default function Home() {
 						<div className='flex gap-6'>
 							<Image src={checkImg} alt="Check image" />
 							<div className='text-white'>
-								<strong className='text-2xl'>+1.900</strong>
+								<strong className='text-2xl'>+{props.guessesCount}</strong>
 								<p>Palpites enviados</p>
 							</div>
 						</div>
@@ -64,6 +71,22 @@ export default function Home() {
 
 				<Image src={devicesImg} alt="Preview app on device screen" quality={100} />
 			</main>
-		</div>
+		</>
 	)
+}
+
+export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
+	const [usersResponse, guessesResponse, poolsResponse] = await Promise.all([
+		api.get('/users/count'),
+		api.get('/guesses/count'),
+		api.get('/pools/count')
+	]);
+
+	return {
+		props: {
+			usersCount: usersResponse.data.count,
+			guessesCount: guessesResponse.data.count,
+			poolsCount: poolsResponse.data.count,
+		}
+	}
 }
