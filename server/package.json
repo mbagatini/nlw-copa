@@ -25,6 +25,8 @@
 		"fastify": "^4.9.2",
 		"mermaid": "^9.1.7",
 		"mermaid.cli": "^0.5.1",
-		"prisma": "^4.5.0"
+		"prisma": "^4.5.0",
+		"short-unique-id": "^4.4.4",
+		"zod": "^3.19.1"
 	}
 }
