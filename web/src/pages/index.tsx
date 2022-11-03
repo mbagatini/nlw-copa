@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import Image from "next/image";
-import { GetServerSideProps } from 'next';
+import { GetStaticProps } from 'next';
 
 import logoImg from '../assets/logo.svg';
 import avatarsImg from '../assets/avatars.png';
@@ -50,7 +50,7 @@ export default function Home(props: HomeProps) {
 	)
 }
 
-export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
+export const getStaticProps: GetStaticProps<HomeProps> = async () => {
 	const [usersResponse, guessesResponse, poolsResponse] = await Promise.all([
 		api.get('/users/count'),
 		api.get('/guesses/count'),
@@ -62,6 +62,7 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
 			usersCount: usersResponse.data.count,
 			guessesCount: guessesResponse.data.count,
 			poolsCount: poolsResponse.data.count,
-		}
+		},
+		revalidate: 60 * 10, // in seconds	
 	}
 }
