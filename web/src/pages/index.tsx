@@ -3,10 +3,12 @@ import Image from "next/image";
 import { GetServerSideProps } from 'next';
 
 import logoImg from '../assets/logo.svg';
-import checkImg from '../assets/check.svg';
 import avatarsImg from '../assets/avatars.png';
 import devicesImg from '../assets/devices.png';
+
 import { api } from '../services/api';
+import { CreationPoolForm } from '../components/CreationPoolForm';
+import { CountInfo } from '../components/CountInfo';
 
 interface HomeProps {
 	usersCount: number;
@@ -33,39 +35,12 @@ export default function Home(props: HomeProps) {
 						</strong>
 					</div>
 
-					<div>
-						<form className='flex gap-2 text-sm'>
-							<input
-								type="text"
-								placeholder='Qual o nome do seu bolão?'
-								className='flex-1 px-6 py-4 rounded bg-gray-700 border border-gray-600 text-white [&[data-placeholder]]:text-gray-200'
-							/>
-							<button type='submit' className='px-6 py-4 rounded bg-yellow-500 font-bold text-gray-950 uppercase hover:brightness-90'>
-								Criar meu bolão
-							</button>
-						</form>
-
-						<p className='text-sm text-gray-400 mt-4 leading-relaxed'>Após criar seu bolão, você receberá um código único que poderá usar para convidar outras pessoas 🚀</p>
-					</div>
+					<CreationPoolForm />
 
 					<div className='flex justify-between border-t border-gray-600 pt-10'>
-						<div className='flex gap-6'>
-							<Image src={checkImg} alt="Check image" />
-							<div className='text-white'>
-								<strong className='text-2xl'>+{props.poolsCount}</strong>
-								<p>Bolões criados</p>
-							</div>
-						</div>
-
+						<CountInfo title='Bolões criados' count={props.poolsCount} />
 						<div className='border-r border-gray-600' />
-
-						<div className='flex gap-6'>
-							<Image src={checkImg} alt="Check image" />
-							<div className='text-white'>
-								<strong className='text-2xl'>+{props.guessesCount}</strong>
-								<p>Palpites enviados</p>
-							</div>
-						</div>
+						<CountInfo title='Palpites enviados' count={props.guessesCount} />
 					</div>
 				</div>
 
