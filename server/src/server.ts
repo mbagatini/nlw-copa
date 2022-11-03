@@ -46,6 +46,11 @@ async function bootstrap() {
 		return res.status(201).send(pool);
 	})
 
+	fastify.get('/pools/count', async () => {
+		const count = await prisma.pool.count();
+		return count;
+	})
+
 	fastify.get('/users/count', async () => {
 		const count = await prisma.user.count();
 		return count;
