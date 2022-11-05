@@ -5,7 +5,27 @@ import { prisma } from "../database/prisma";
 import { authenticate } from "../plugins/auth";
 
 export async function pollRoutes(fastify: FastifyInstance) {
-	fastify.get('/polls', async () => {
+	fastify.get('/polls',
+		{ onRequest: [authenticate] },
+		async (req, res) => {
+			const polls = await prisma.poll.findMany({
+				where: {
+					participants: {
+						some: {
+							userId: req.user.sub
+						}
+					}
+				},
+				include: {
+					owner: {
+						select: { name: true }
+					}
+				}
+			});
+
+			return polls;
+		}
+	)
 		const polls = await prisma.poll.findMany();
 		return polls;
 	})
