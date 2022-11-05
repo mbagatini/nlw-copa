@@ -32,6 +32,11 @@ export async function pollRoutes(fastify: FastifyInstance) {
 		return polls;
 	})
 
+	fastify.get('/polls/count', async () => {
+		const count = await prisma.poll.count();
+		return { count };
+	})
+
 	fastify.post('/polls', async (req, res) => {
 		const createPollBody = z.object({
 			title: z.string(),
