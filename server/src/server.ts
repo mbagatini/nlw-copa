@@ -1,5 +1,6 @@
 import cors from '@fastify/cors';
 import Fastify from 'fastify';
+import jwt from '@fastify/jwt';
 
 import { guessRoutes } from './routes/guess';
 import { pollRoutes } from './routes/poll';
@@ -11,6 +12,10 @@ async function bootstrap() {
 	});
 
 	await fastify.register(cors, { origin: true });
+
+	fastify.register(jwt, {
+		secret: process.env.JWT_SECRET || 'supersecret'
+	});
 
 	fastify.register(pollRoutes);
 	fastify.register(guessRoutes);
