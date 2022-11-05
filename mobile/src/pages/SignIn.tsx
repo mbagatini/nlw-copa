@@ -1,10 +1,25 @@
 import React from "react";
-import { Center, Text } from "native-base";
+import { Center, Icon, Text } from "native-base";
+import { Fontisto } from "@expo/vector-icons";
+
+import LogoImg from "../assets/logo.svg";
+import { Button } from "../components/Button";
 
 export function SignIn() {
 	return (
-		<Center flex={1} bgColor="gray.900">
-			<Text color="white" fontSize={24} fontFamily="heading">Hello sign in</Text>
-		</Center>
+		<Center flex={1} bgColor="gray.900" p={7}>
+			<LogoImg width={212} height={40} />
+
+			<Button color="red.600" titleColor="white" mt={12}
+				leftIcon={<Icon as={Fontisto} color="white" size="md" name="google" />}
+			>
+				ENTRAR COM GOOGLE
+			</Button>
+
+			<Text color="white" textAlign="center" mt={6}>
+				Não utilizamos nenhuma informação além {'\n'}
+				do seu e-mail para criação de sua conta.
+			</Text>
+		</Center >
 	)
 }
