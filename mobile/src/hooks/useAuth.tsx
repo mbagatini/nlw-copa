@@ -1,4 +1,6 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+
+import { getGoogleAuthRequest, signInWithGoogle } from '../services/googleAuth';
 
 interface User {
 	name: string;
@@ -14,18 +16,31 @@ interface AuthContextData {
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
+
 export function AuthProvider({ children }) {
 	const [user, setUser] = useState<User | null>(null);
 
-	async function signIn() {
-		// const response = await auth.signIn();
+	const { response, promptAsync } = getGoogleAuthRequest();
 
-		// setUser(response.user);
+	async function signIn() {
+		try {
+			await promptAsync();
+			// const response = await auth.signIn();
+			// setUser(response.user);
+		} catch (error) {
+
+		}
 	}
 
 	function signOut() {
 		setUser(null);
 	}
+
+	useEffect(() => {
+		if (response && response.type === 'success' && response.authentication?.accessToken) {
+			signInWithGoogle(response.authentication.accessToken);
+		}
+	}, [response])
 
 	return (
 		<AuthContext.Provider
