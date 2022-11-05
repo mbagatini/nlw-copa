@@ -9,7 +9,7 @@ async function main() {
 		}
 	});
 
-	const pool = await prisma.pool.create({
+	const poll = await prisma.poll.create({
 		data: {
 			title: 'The great winner',
 			code: 'WEHEX4',
@@ -42,8 +42,8 @@ async function main() {
 					teamBPoints: 1,
 					participant: {
 						connect: {
-							userId_poolId: {
-								poolId: pool.id,
+							userId_pollId: {
+								pollId: poll.id,
 								userId: user.id
 							}
 						}
