@@ -83,8 +83,42 @@ export async function pollRoutes(fastify: FastifyInstance) {
 		return res.status(201).send(poll);
 	})
 
-	fastify.get('/polls/count', async () => {
-		const count = await prisma.poll.count();
-		return { count };
-	})
+	fastify.post('/polls/:id/join',
+		{ onRequest: [authenticate] },
+		async (req, res) => {
+			const { id } = req.params as { id: string };
+
+			if (!id) {
+				return res.status(400).send({ message: "An id must be provided" });
+			}
+
+			let poll;
+
+			try {
+				poll = await prisma.poll.findUniqueOrThrow({
+					where: { id },
+					include: {
+						participants: {
+							where: { userId: req.user.sub }
+						}
+					}
+				});
+			} catch (error) {
+				return res.status(404).send({ message: "Poll not found" });
+			}
+
+			if (poll.participants.length > 0) {
+				return res.status(400).send({ message: "You already joined this poll" });
+			}
+
+			await prisma.participant.create({
+				data: {
+					pollId: poll.id,
+					userId: req.user.sub
+				}
+			});
+
+			return res.status(201).send();
+		}
+	)
 }
