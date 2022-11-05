@@ -2,6 +2,7 @@ import { FastifyInstance } from "fastify";
 import ShortUniqueId from "short-unique-id";
 import { z } from "zod";
 import { prisma } from "../database/prisma";
+import { authenticate } from "../plugins/auth";
 
 export async function pollRoutes(fastify: FastifyInstance) {
 	fastify.get('/polls', async () => {
@@ -12,7 +13,6 @@ export async function pollRoutes(fastify: FastifyInstance) {
 	fastify.post('/polls', async (req, res) => {
 		const createPollBody = z.object({
 			title: z.string(),
-			ownerId: z.string().cuid().optional()
 		});
 
 		var data;
@@ -28,10 +28,28 @@ export async function pollRoutes(fastify: FastifyInstance) {
 			return res.status(400);
 		}
 
+		// Try to check if user is authenticated
+		try {
+			authenticate(req);
+		} catch (error) {
+			// ignore if the user is not authenticated
+		}
+
 		const poll = await prisma.poll.create({
 			data: {
 				...data,
-				code: String(generateUid()).toUpperCase()
+				code: String(generateUid()).toUpperCase(),
+
+				// Add data from user authenticated
+				...(req.user.sub && {
+					ownerId: req.user.sub,
+
+					participants: {
+						create: {
+							userId: req.user.sub
+						}
+					}
+				})
 			}
 		});
 
