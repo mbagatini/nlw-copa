@@ -26,6 +26,8 @@ export async function pollRoutes(fastify: FastifyInstance) {
 			return polls;
 		}
 	)
+
+	fastify.get('/polls/all', async () => {
 		const polls = await prisma.poll.findMany();
 		return polls;
 	})
