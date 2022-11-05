@@ -5,7 +5,8 @@ async function main() {
 		data: {
 			name: 'John Doe',
 			email: 'john@doe.com',
-			avatarUrl: 'https://avatars.dicebear.com/api/micah/avavavavav.svg'
+			avatarUrl: 'https://avatars.dicebear.com/api/micah/avavavavav.svg',
+			googleId: 'myfakeid'
 		}
 	});
 
