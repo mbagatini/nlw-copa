@@ -42,7 +42,7 @@ export async function pollRoutes(fastify: FastifyInstance) {
 			title: z.string(),
 		});
 
-		var data;
+		let data;
 		const generateUid = new ShortUniqueId({ length: 6 });
 
 		try {
@@ -57,7 +57,7 @@ export async function pollRoutes(fastify: FastifyInstance) {
 
 		// Try to check if user is authenticated
 		try {
-			authenticate(req);
+			await authenticate(req);
 		} catch (error) {
 			// ignore if the user is not authenticated
 		}
@@ -68,7 +68,7 @@ export async function pollRoutes(fastify: FastifyInstance) {
 				code: String(generateUid()).toUpperCase(),
 
 				// Add data from user authenticated
-				...(req.user.sub && {
+				...(req?.user?.sub && {
 					ownerId: req.user.sub,
 
 					participants: {
