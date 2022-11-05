@@ -1,5 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { z } from "zod";
+import axios from "axios";
 
 import { prisma } from "../database/prisma";
 import { authenticate } from "../plugins/auth";
@@ -19,10 +20,10 @@ export async function authRoutes(fastify: FastifyInstance) {
 			access_token: z.string(),
 		});
 
-		var accessToken;
+		let accessToken;
 
 		try {
-			accessToken = authBody.parse(req.body);
+			accessToken = authBody.parse(req.body).access_token;
 		} catch (error) {
 			if (error instanceof z.ZodError) {
 				return res.status(400).send(error.flatten().fieldErrors)
@@ -31,14 +32,13 @@ export async function authRoutes(fastify: FastifyInstance) {
 			return res.status(400);
 		}
 
-		const userResponse = await fetch('', {
-			method: 'GET',
+		const userResponse = await axios.get('https://www.googleapis.com/oauth2/v2/userinfo', {
 			headers: {
 				Authorization: `Bearer ${accessToken}`
 			}
 		});
 
-		const userData = await userResponse.json();
+		const userData = userResponse.data;
 
 		const userInfoSchema = z.object({
 			id: z.string(),
@@ -47,7 +47,7 @@ export async function authRoutes(fastify: FastifyInstance) {
 			picture: z.string().url(),
 		});
 
-		var userInfo;
+		let userInfo;
 
 		try {
 			userInfo = userInfoSchema.parse(userData);
@@ -59,7 +59,7 @@ export async function authRoutes(fastify: FastifyInstance) {
 			return res.status(400);
 		}
 
-		var user = await prisma.user.findUnique({
+		let user = await prisma.user.findUnique({
 			where: { googleId: userInfo.id }
 		});
 

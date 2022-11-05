@@ -5,6 +5,7 @@ import jwt from '@fastify/jwt';
 import { guessRoutes } from './routes/guess';
 import { pollRoutes } from './routes/poll';
 import { userRoutes } from './routes/user';
+import { authRoutes } from './routes/auth';
 
 async function bootstrap() {
 	const fastify = Fastify({
@@ -17,6 +18,7 @@ async function bootstrap() {
 		secret: process.env.JWT_SECRET || 'supersecret'
 	});
 
+	fastify.register(authRoutes);
 	fastify.register(pollRoutes);
 	fastify.register(guessRoutes);
 	fastify.register(userRoutes);
