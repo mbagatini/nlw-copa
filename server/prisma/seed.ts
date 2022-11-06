@@ -3,6 +3,33 @@ import { faker } from "@faker-js/faker";
 import { prisma } from "../src/database/prisma";
 
 async function main() {
+	const countriesCodes = [
+		"BR",
+		"AE",
+		"JP",
+		"AM",
+		"BE",
+		"CL",
+		"CR",
+		"CO",
+		"DE",
+		"EC",
+		"ES",
+		"EG",
+		"FR",
+		"GF",
+		"GR",
+		"GT",
+		"HR",
+		"IT",
+		"KM",
+		"MA",
+		"MX",
+		"NO",
+		"PR",
+		"QA",
+	];
+
 	// create game without guesses
 	await prisma.game.create({
 		data: {
@@ -41,14 +68,14 @@ async function main() {
 		// create game with a guess
 		await prisma.game.create({
 			data: {
-				date: '2022-12-12T12:00:00.737Z',
-				teamACountryCode: 'BR',
-				teamBCountryCode: 'MX',
+				date: faker.date.future(),
+				teamACountryCode: faker.helpers.arrayElement(countriesCodes),
+				teamBCountryCode: faker.helpers.arrayElement(countriesCodes),
 
 				guesses: {
 					create: {
-						teamAPoints: 3,
-						teamBPoints: 1,
+						teamAPoints: faker.datatype.number({ min: 0, max: 9 }),
+						teamBPoints: faker.datatype.number({ min: 0, max: 9 }),
 						participant: {
 							connect: {
 								userId_pollId: {
