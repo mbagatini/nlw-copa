@@ -1,6 +1,8 @@
 import { makeRedirectUri } from 'expo-auth-session';
-import * as Google from 'expo-auth-session/providers/google';
+import { useAuthRequest } from 'expo-auth-session/providers/google';
 import { maybeCompleteAuthSession } from 'expo-web-browser';
+
+import { api } from './api';
 
 /**
  * Possibly completes an authentication session on web in a window popup. 
@@ -19,7 +21,7 @@ export function getGoogleAuthRequest() {
 	/**
 	 * Setup the Google authorization request
 	 */
-	const [request, response, promptAsync] = Google.useAuthRequest({
+	const [request, response, promptAsync] = useAuthRequest({
 		clientId: '637785802951-1k5ifcie921mjgj3teqemad6dklcd1ji.apps.googleusercontent.com',
 		redirectUri: uriRedirect,
 		scopes: ['profile', 'email']
@@ -29,5 +31,14 @@ export function getGoogleAuthRequest() {
 }
 
 export async function signInWithGoogle(accessToken: string) {
-	console.log(accessToken)
+	console.log("TOKEN =============> " + accessToken);
+
+	const response = await api.post('/auth', {
+		"access_token": accessToken
+	});
+
+	// JWT token
+	const { token } = response.data;
+
+	return { token };
 }

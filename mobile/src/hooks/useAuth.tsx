@@ -1,10 +1,11 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { api } from "../services/api";
 
 import { getGoogleAuthRequest, signInWithGoogle } from '../services/googleAuth';
 
 interface User {
 	name: string;
-	email: string;
+	avatarUrl: string;
 }
 
 interface AuthContextData {
@@ -24,11 +25,20 @@ export function AuthProvider({ children }) {
 
 	async function signIn() {
 		try {
-			await promptAsync();
-			// const response = await auth.signIn();
-			// setUser(response.user);
-		} catch (error) {
+			// await promptAsync();
+			if (response && response.type === 'success' && response.authentication?.accessToken) {
 
+				const { token } = await signInWithGoogle(response.authentication.accessToken);
+
+				// set authorization for all future request
+				api.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+
+				const userResponse = await api.get('/me');
+
+				setUser({ ...userResponse.data.user });
+			}
+		} catch (error) {
+			console.error(error);
 		}
 	}
 
@@ -36,11 +46,7 @@ export function AuthProvider({ children }) {
 		setUser(null);
 	}
 
-	useEffect(() => {
-		if (response && response.type === 'success' && response.authentication?.accessToken) {
-			signInWithGoogle(response.authentication.accessToken);
-		}
-	}, [response])
+	useEffect(() => { signIn() }, [response])
 
 	return (
 		<AuthContext.Provider
