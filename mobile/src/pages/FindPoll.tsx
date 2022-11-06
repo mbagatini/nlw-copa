@@ -5,7 +5,7 @@ import { Button } from "../components/Button";
 import { Header } from "../components/Header";
 import { Input } from "../components/Input";
 
-export function FindPool() {
+export function FindPoll() {
 
 	return (
 		<VStack flex={1} bgColor="gray.900" p={7}>
