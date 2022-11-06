@@ -19,6 +19,24 @@ export async function pollRoutes(fastify: FastifyInstance) {
 				include: {
 					owner: {
 						select: { name: true }
+					},
+					// number of participants
+					_count: {
+						select: {
+							participants: true
+						}
+					},
+					// user info of first 4 participants
+					participants: {
+						select: {
+							id: true,
+							user: {
+								select: {
+									avatarUrl: true
+								}
+							}
+						},
+						take: 4
 					}
 				}
 			});
