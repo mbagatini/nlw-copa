@@ -1,4 +1,5 @@
 import { NavigationContainer } from '@react-navigation/native';
+import { Box } from 'native-base';
 import React from 'react';
 
 import AppRoutes from './app.routes';
@@ -9,8 +10,10 @@ export default function Routes() {
 	const { isUserSigned } = useAuth();
 
 	return (
-		<NavigationContainer>
-			{isUserSigned ? <AppRoutes /> : <SignIn />}
-		</NavigationContainer>
+		<Box flex={1} bg="gray.900">
+			<NavigationContainer>
+				{isUserSigned ? <AppRoutes /> : <SignIn />}
+			</NavigationContainer>
+		</Box>
 	);
 }
