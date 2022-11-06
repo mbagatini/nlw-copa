@@ -3,9 +3,9 @@ import { NativeBaseProvider, StatusBar } from 'native-base';
 import React from 'react';
 
 import { theme } from './src/styles/theme';
-import { Loading } from './src/components/Loading';
 import { SignIn } from './src/pages/SignIn';
 import { AuthProvider } from './src/hooks/useAuth';
+import Routes from './src/routes';
 
 export default function App() {
 	const [fontsLoaded] = useFonts({ Roboto_400Regular, Roboto_500Medium, Roboto_700Bold });
@@ -20,7 +20,7 @@ export default function App() {
 				/>
 
 				{!fontsLoaded ? (
-					<Loading />
+					<Routes />
 				) : (
 					<SignIn />
 				)}
