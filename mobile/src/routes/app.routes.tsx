@@ -30,11 +30,13 @@ export default function AppRoutes() {
 		}}>
 			<Screen name="newpp" component={NewPoll}
 				options={{
+					tabBarLabel: 'Novo bolão',
 					tabBarIcon: ({ color }) => <PlusCircle color={color} size={12} />
 				}}
 			/>
 			<Screen name="polls" component={Polls}
 				options={{
+					tabBarLabel: 'Meus bolões',
 					tabBarIcon: ({ color }) => <SoccerBall color={color} size={12} />
 				}}
 			/>
