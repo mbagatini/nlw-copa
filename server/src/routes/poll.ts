@@ -55,6 +55,50 @@ export async function pollRoutes(fastify: FastifyInstance) {
 		return { count };
 	})
 
+	fastify.get('/polls/:id',
+		{ onRequest: [authenticate] },
+		async (req, res) => {
+			const { id } = req.params as { id: string };
+
+			if (!id) {
+				return res.status(400).send({ message: "An id must be provided" });
+			}
+
+			try {
+				const poll = await prisma.poll.findUniqueOrThrow({
+					where: { id },
+					include: {
+						owner: {
+							select: { name: true }
+						},
+						// number of participants
+						_count: {
+							select: {
+								participants: true
+							}
+						},
+						// user info of first 4 participants
+						participants: {
+							select: {
+								id: true,
+								user: {
+									select: {
+										avatarUrl: true
+									}
+								}
+							},
+							take: 4
+						}
+					}
+				});
+
+				return { poll };
+			} catch (error) {
+				return res.status(404).send({ message: "Poll not found" });
+			}
+		}
+	)
+
 	fastify.post('/polls', async (req, res) => {
 		const createPollBody = z.object({
 			title: z.string(),
@@ -70,7 +114,7 @@ export async function pollRoutes(fastify: FastifyInstance) {
 				return res.status(400).send(error.flatten().fieldErrors)
 			}
 
-			return res.status(400);
+			return res.status(400).send();
 		}
 
 		// Try to check if user is authenticated
