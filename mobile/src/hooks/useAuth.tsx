@@ -9,7 +9,7 @@ interface User {
 }
 
 interface AuthContextData {
-	signed: boolean;
+	isUserSigned: boolean;
 	user: User | null;
 	signIn(): Promise<void>;
 	signOut(): void;
@@ -50,7 +50,7 @@ export function AuthProvider({ children }) {
 
 	return (
 		<AuthContext.Provider
-			value={{ signed: !!user, user, signIn, signOut }}>
+			value={{ isUserSigned: !!user, user, signIn, signOut }}>
 			{children}
 		</AuthContext.Provider>
 	);

@@ -1,11 +1,11 @@
+import React from 'react';
 import { Roboto_400Regular, Roboto_500Medium, Roboto_700Bold, useFonts } from '@expo-google-fonts/roboto';
 import { NativeBaseProvider, StatusBar } from 'native-base';
-import React from 'react';
 
-import { theme } from './src/styles/theme';
-import { SignIn } from './src/pages/SignIn';
-import { AuthProvider } from './src/hooks/useAuth';
 import Routes from './src/routes';
+import { theme } from './src/styles/theme';
+import { AuthProvider } from './src/hooks/useAuth';
+import { Loading } from './src/components/Loading';
 
 export default function App() {
 	const [fontsLoaded] = useFonts({ Roboto_400Regular, Roboto_500Medium, Roboto_700Bold });
@@ -20,9 +20,9 @@ export default function App() {
 				/>
 
 				{!fontsLoaded ? (
-					<Routes />
+					<Loading />
 				) : (
-					<SignIn />
+					<Routes />
 				)}
 			</AuthProvider>
 		</NativeBaseProvider>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Center, Icon, Text } from "native-base";
 import { Fontisto } from "@expo/vector-icons";
 
@@ -8,6 +8,13 @@ import { Button } from "../components/Button";
 
 export function SignIn() {
 	const { signIn } = useAuth();
+	const [isSigningin, setIsSigningin] = useState(false);
+
+	async function handleSignIn() {
+		setIsSigningin(true);
+		await signIn();
+		setIsSigningin(false);
+	}
 
 	return (
 		<Center flex={1} bgColor="gray.900" p={7}>
@@ -15,7 +22,9 @@ export function SignIn() {
 
 			<Button color="red.600" titleColor="white" mt={12}
 				leftIcon={<Icon as={Fontisto} color="white" size="md" name="google" />}
-				onPress={signIn}
+				onPress={() => handleSignIn}
+				isLoading={isSigningin}
+				_loading={{ _spinner: { color: "white" } }}
 			>
 				ENTRAR COM GOOGLE
 			</Button>
