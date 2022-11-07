@@ -1,9 +1,9 @@
+import React, { useEffect, useState } from "react";
 import { useRoute } from "@react-navigation/native";
 import { HStack, VStack } from "native-base";
-import React, { useEffect, useState } from "react";
 import { Share } from "react-native";
-import { EmptyMyPoolList } from "../components/EmptyMyPoolList";
 
+import { EmptyMyPoolList } from "../components/EmptyMyPoolList";
 import { Header } from "../components/Header";
 import { Loading } from "../components/Loading";
 import { Option } from "../components/Option";
@@ -11,6 +11,7 @@ import { PoolPros } from "../components/PoolCard";
 import { PoolHeader } from "../components/PoolHeader";
 import { toast } from "../hooks/useToast";
 import { api } from "../services/api";
+import { Guesses } from "../components/Guesses";
 
 export function PollDetails() {
 	const [poll, setPoll] = useState<PoolPros>({} as PoolPros);
@@ -69,6 +70,8 @@ export function PollDetails() {
 							onPress={() => setOptionSelected('ranking')}
 						/>
 					</HStack>
+
+					<Guesses poolId={poll.id} />
 				</VStack>
 			)}
 		</VStack>
