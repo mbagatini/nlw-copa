@@ -4,7 +4,7 @@ type CustomRootParamList = {
 	new: undefined;
 	find: undefined;
 	polls: undefined;
-	details: NavigatorScreenParams<DetailsParamList>;
+	details: DetailsParamList;
 };
 
 type DetailsParamList = {

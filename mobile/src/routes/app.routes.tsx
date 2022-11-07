@@ -6,6 +6,7 @@ import { PlusCircle, SoccerBall } from "phosphor-react-native";
 import { NewPoll } from "../pages/NewPoll";
 import { Polls } from "../pages/Polls";
 import { FindPoll } from "../pages/FindPoll";
+import { PollDetails } from "../pages/PollDetails";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -41,6 +42,11 @@ export default function AppRoutes() {
 				}}
 			/>
 			<Screen name="find" component={FindPoll}
+				options={{
+					tabBarButton: () => null, // hide option from tab bar
+				}}
+			/>
+			<Screen name="details" component={PollDetails}
 				options={{
 					tabBarButton: () => null, // hide option from tab bar
 				}}
