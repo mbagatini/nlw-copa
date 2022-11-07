@@ -24,18 +24,24 @@ export function AuthProvider({ children }) {
 	const { response, promptAsync } = getGoogleAuthRequest();
 
 	async function signIn() {
-		try {
-			// await promptAsync();
-			if (response && response.type === 'success' && response.authentication?.accessToken) {
+		await promptAsync({ useProxy: true });
+	}
 
+	function setUserInfo() {
+		api.get('/me').then(userResponse => {
+			setUser({ ...userResponse.data.user });
+		})
+	}
+
+	async function handleJWTHeader() {
+		try {
+			if (response && response.type === 'success' && response.authentication?.accessToken) {
 				const { token } = await signInWithGoogle(response.authentication.accessToken);
 
 				// set authorization for all future request
 				api.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
-				const userResponse = await api.get('/me');
-
-				setUser({ ...userResponse.data.user });
+				setUserInfo();
 			}
 		} catch (error) {
 			console.error(error);
@@ -46,7 +52,9 @@ export function AuthProvider({ children }) {
 		setUser(null);
 	}
 
-	useEffect(() => { signIn() }, [response])
+	useEffect(() => {
+		handleJWTHeader();
+	}, [response])
 
 	return (
 		<AuthContext.Provider

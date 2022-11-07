@@ -8,12 +8,12 @@ import { Button } from "../components/Button";
 
 export function SignIn() {
 	const { signIn } = useAuth();
-	const [isSigningin, setIsSigningin] = useState(false);
+	const [isSigningIn, setIsSigningIn] = useState(false);
 
 	async function handleSignIn() {
-		setIsSigningin(true);
+		setIsSigningIn(true);
 		await signIn();
-		setIsSigningin(false);
+		setIsSigningIn(false);
 	}
 
 	return (
@@ -22,8 +22,8 @@ export function SignIn() {
 
 			<Button color="red.600" titleColor="white" mt={12}
 				leftIcon={<Icon as={Fontisto} color="white" size="md" name="google" />}
-				onPress={() => handleSignIn}
-				isLoading={isSigningin}
+				onPress={handleSignIn}
+				isLoading={isSigningIn}
 				_loading={{ _spinner: { color: "white" } }}
 			>
 				ENTRAR COM GOOGLE
