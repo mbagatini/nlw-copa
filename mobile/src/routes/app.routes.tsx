@@ -17,7 +17,7 @@ export default function AppRoutes() {
 			headerShown: false,
 			tabBarLabelPosition: 'beside-icon',
 			tabBarActiveTintColor: colors.yellow[500],
-			tabBarInactiveTintColor: colors.gray[300],
+			tabBarInactiveTintColor: colors.gray[500],
 			tabBarStyle: {
 				position: 'absolute',
 				height: 80,
@@ -28,16 +28,16 @@ export default function AppRoutes() {
 				position: 'relative',
 			}
 		}}>
-			<Screen name="newpp" component={NewPoll}
+			<Screen name="new" component={NewPoll}
 				options={{
 					tabBarLabel: 'Novo bolão',
-					tabBarIcon: ({ color }) => <PlusCircle color={color} size={12} />
+					tabBarIcon: ({ color }) => <PlusCircle color={color} size={24} />
 				}}
 			/>
 			<Screen name="polls" component={Polls}
 				options={{
 					tabBarLabel: 'Meus bolões',
-					tabBarIcon: ({ color }) => <SoccerBall color={color} size={12} />
+					tabBarIcon: ({ color }) => <SoccerBall color={color} size={24} />
 				}}
 			/>
 			<Screen name="find" component={FindPoll}
