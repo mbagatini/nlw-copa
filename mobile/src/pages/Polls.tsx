@@ -25,6 +25,10 @@ export function Polls() {
 					setPolls(response.data);
 				})
 				.catch(error => {
+					if (error.response?.data?.message) {
+						return toast(error.response.data.message);
+					}
+
 					toast("Não foi possível obter seus bolões");
 				})
 				.finally(() => {
@@ -51,7 +55,9 @@ export function Polls() {
 					<FlatList
 						data={polls}
 						keyExtractor={item => item.id}
-						renderItem={({ item }) => <PoolCard data={item} />}
+						renderItem={({ item }) => (
+							<PoolCard data={item} onPress={() => navigate('details', { id: item.id })} />
+						)}
 						ListEmptyComponent={<EmptyPoolList />}
 						showsVerticalScrollIndicator={false}
 						_contentContainerStyle={{ pb: 10 }}
