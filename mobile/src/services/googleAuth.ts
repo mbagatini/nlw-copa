@@ -22,7 +22,7 @@ export function getGoogleAuthRequest() {
 	 * Setup the Google authorization request
 	 */
 	const [request, response, promptAsync] = useAuthRequest({
-		clientId: '637785802951-1k5ifcie921mjgj3teqemad6dklcd1ji.apps.googleusercontent.com',
+		clientId: process.env.CLIENT_ID,
 		redirectUri: uriRedirect,
 		scopes: ['profile', 'email']
 	});
