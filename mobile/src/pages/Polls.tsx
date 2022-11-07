@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FlatList, Icon, VStack } from "native-base";
 import { Octicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 
 import { api } from "../services/api";
 import { toast } from "../hooks/useToast";
@@ -16,20 +16,22 @@ export function Polls() {
 	const { navigate } = useNavigation();
 	const [isLoading, setIsLoading] = useState(false);
 
-	useEffect(() => {
-		setIsLoading(true);
+	useFocusEffect(
+		useCallback(() => {
+			setIsLoading(true);
 
-		api.get('/polls')
-			.then(response => {
-				setPolls(response.data);
-			})
-			.catch(error => {
-				toast("Não foi possível obter seus bolões");
-			})
-			.finally(() => {
-				setIsLoading(false);
-			})
-	}, []);
+			api.get('/polls')
+				.then(response => {
+					setPolls(response.data);
+				})
+				.catch(error => {
+					toast("Não foi possível obter seus bolões");
+				})
+				.finally(() => {
+					setIsLoading(false);
+				})
+		}, [])
+	);
 
 	return (
 		<VStack flex={1} bgColor="gray.900">
