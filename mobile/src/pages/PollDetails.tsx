@@ -1,6 +1,7 @@
 import { useRoute } from "@react-navigation/native";
 import { HStack, VStack } from "native-base";
 import React, { useEffect, useState } from "react";
+import { Share } from "react-native";
 import { EmptyMyPoolList } from "../components/EmptyMyPoolList";
 
 import { Header } from "../components/Header";
@@ -18,6 +19,12 @@ export function PollDetails() {
 
 	const route = useRoute();
 	const { id } = route.params as { id: string }
+
+	async function handlePollCodeShare() {
+		await Share.share({
+			message: poll.code
+		});
+	}
 
 	useEffect(() => {
 		setIsLoading(true);
@@ -44,7 +51,7 @@ export function PollDetails() {
 
 	return (
 		<VStack flex={1} bgColor="gray.900">
-			<Header title={poll.title} showBackButton showShareButton />
+			<Header title={poll.title} showBackButton showShareButton onShare={handlePollCodeShare} />
 
 			{poll._count?.participants == 0 ? (
 				<EmptyMyPoolList code={poll.code} />
