@@ -71,7 +71,7 @@ export function PollDetails() {
 						/>
 					</HStack>
 
-					<Guesses poolId={poll.id} />
+					<Guesses poolId={poll.id} code={poll.code} />
 				</VStack>
 			)}
 		</VStack>
