@@ -2,7 +2,7 @@
 import { extendTheme } from "native-base";
 
 // 2. Extend the theme to include custom colors, fonts, etc
-const newColorTheme = {
+const newTheme = {
 	colors: {
 		gray: {
 			950: '#09090A',
@@ -41,4 +41,4 @@ const newColorTheme = {
 	}
 };
 
-export const theme = extendTheme({ colors: newColorTheme });
+export const theme = extendTheme(newTheme);
