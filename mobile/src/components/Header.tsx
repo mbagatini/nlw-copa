@@ -25,7 +25,7 @@ export function Header({ title, showBackButton = false, showShareButton = false,
 						: <EmptyBoxSpace />
 				}
 
-				<Text color="white" fontFamily="heading" fontSize="md" textAlign="center">
+				<Text color="white" fontFamily="medium" fontSize="md" textAlign="center">
 					{title}
 				</Text>
 
@@ -37,6 +37,6 @@ export function Header({ title, showBackButton = false, showShareButton = false,
 						<EmptyBoxSpace />
 				}
 			</HStack>
-		</HStack>
+		</HStack >
 	);
 }
