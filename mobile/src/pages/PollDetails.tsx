@@ -57,12 +57,12 @@ export function PollDetails() {
 			<Header title={poll.title} showBackButton showShareButton onShare={handlePollCodeShare} />
 
 			<VStack alignItems="center" px={7}>
-				{poll._count?.participants == 0 ? (
+				<PoolHeader data={poll} />
+
+				{poll._count?.participants > 0 ? (
 					<EmptyMyPoolList code={poll.code} />
 				) : (
 					<VStack>
-						<PoolHeader data={poll} />
-
 						<HStack rounded="sm" mb={8} bgColor="gray.800">
 							<Option title="Seus palpites"
 								isSelected={optionSelected == 'guesses'}
