@@ -59,7 +59,7 @@ export function PollDetails() {
 			<VStack alignItems="center" px={7}>
 				<PoolHeader data={poll} />
 
-				{poll._count?.participants > 0 ? (
+				{poll._count?.participants == 0 ? (
 					<EmptyMyPoolList code={poll.code} />
 				) : (
 					<VStack>
