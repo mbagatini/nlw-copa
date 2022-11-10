@@ -1,20 +1,22 @@
 import React, { useState } from "react";
-import { VStack, Text, Heading } from "native-base";
+import { VStack, Text, Heading, useToast } from "native-base";
 
 import LogoImg from "../assets/logo.svg";
 import { api } from "../services/api";
-import { toast } from "../hooks/useToast";
 import { Button } from "../components/Button";
 import { Header } from "../components/Header";
 import { Input } from "../components/Input";
+import { getToastMessage } from "../utils/useToast";
 
 export function NewPoll() {
 	const [title, setTitle] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 
+	const toast = useToast();
+
 	async function handleAddPoll() {
 		if (!title.trim()) {
-			return toast("Informe um nome para o bolão");
+			return toast.show(getToastMessage("Informe um nome para o bolão"));
 		}
 
 		setIsLoading(true);
@@ -22,9 +24,9 @@ export function NewPoll() {
 		try {
 			await api.post('/polls', { title });
 			setTitle("");
-			toast("Bolão criado com sucesso");
+			toast.show(getToastMessage("Bolão criado com sucesso"));
 		} catch (error) {
-			toast("Ocorreu um problema ao criar o bolão");
+			toast.show(getToastMessage("Ocorreu um problema ao criar o bolão"));
 		} finally {
 			setIsLoading(false);
 		}

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { FlatList } from 'native-base';
+import { FlatList, useToast } from 'native-base';
 
-import { toast } from "../hooks/useToast";
 import { api } from "../services/api";
 import { Game, GameProps } from "./Game";
 import { Loading } from "./Loading";
 import { EmptyMyPoolList } from "./EmptyMyPoolList";
+import { getToastMessage } from "../utils/useToast";
 
 interface Props {
 	poolId: string;
@@ -18,9 +18,11 @@ export function Guesses({ poolId, code }: Props) {
 	const [firstTeamPoints, setFirstTeamPoints] = useState('');
 	const [secondTeamPoints, setSecondTeamPoints] = useState('');
 
+	const toast = useToast();
+
 	async function handleAddGuess(gameId: string) {
 		if (!firstTeamPoints.trim() || !secondTeamPoints.trim()) {
-			return toast('Informe o placar para o jogo')
+			return toast.show(getToastMessage('Informe o placar para o jogo'))
 		}
 
 		try {
@@ -29,13 +31,13 @@ export function Guesses({ poolId, code }: Props) {
 				secondTeamPoints: Number(secondTeamPoints)
 			});
 
-			toast("Palpite criado com sucesso");
+			toast.show(getToastMessage("Palpite criado com sucesso"));
 		} catch (error) {
 			if (error.response?.data?.message) {
-				return toast(error.response.data.message);
+				return toast.show(getToastMessage(error.response.data.message));
 			}
 
-			toast("Não foi possível criar o palpite");
+			toast.show(getToastMessage("Não foi possível criar o palpite"));
 		}
 	}
 
@@ -48,10 +50,10 @@ export function Guesses({ poolId, code }: Props) {
 			})
 			.catch(error => {
 				if (error.response?.data?.message) {
-					return toast(error.response.data.message);
+					return toast.show(getToastMessage(error.response.data.message));
 				}
 
-				toast("Não foi possível obter seus bolões");
+				toast.show(getToastMessage("Não foi possível obter seus bolões"));
 			})
 			.finally(() => {
 				setIsLoading(false);

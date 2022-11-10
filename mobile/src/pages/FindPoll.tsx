@@ -1,33 +1,35 @@
-import { Heading, VStack } from "native-base";
+import { Heading, useToast, VStack } from "native-base";
 import React, { useState } from "react";
 
 import { Button } from "../components/Button";
 import { Header } from "../components/Header";
 import { Input } from "../components/Input";
-import { toast } from "../hooks/useToast";
 import { api } from "../services/api";
+import { getToastMessage } from "../utils/useToast";
 
 export function FindPoll() {
 	const [pollCode, setPollCode] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
+
+	const toast = useToast();
 
 	async function handleFindPoll() {
 		try {
 			setIsLoading(true);
 
 			if (!pollCode.trim()) {
-				return toast('Informe o código do bolão');
+				return toast.show(getToastMessage('Informe o código do bolão'));
 			}
 
 			await api.post(`polls/${pollCode}/join`);
 
-			toast('Agora você é um participante do bolão!');
+			toast.show(getToastMessage('Agora você é um participante do bolão!'));
 		} catch (error) {
 			if (error.response?.data?.message) {
-				return toast(error.response.data.message);
+				return toast.show(getToastMessage(error.response.data.message));
 			}
 
-			toast('Ocorreu um problema ao buscar o bolão');
+			toast.show(getToastMessage('Ocorreu um problema ao buscar o bolão'));
 		} finally {
 			setIsLoading(false);
 		}

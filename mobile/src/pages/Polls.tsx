@@ -1,20 +1,22 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { FlatList, Icon, VStack } from "native-base";
+import { FlatList, Icon, useToast, VStack } from "native-base";
 import { Octicons } from "@expo/vector-icons";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 
 import { api } from "../services/api";
-import { toast } from "../hooks/useToast";
 import { Button } from "../components/Button";
 import { Header } from "../components/Header";
 import { EmptyPoolList } from "../components/EmptyPoolList";
 import { PoolPros, PoolCard } from "../components/PoolCard";
 import { Loading } from "../components/Loading";
+import { getToastMessage } from "../utils/useToast";
 
 export function Polls() {
 	const [polls, setPolls] = useState<PoolPros[]>([]);
 	const { navigate } = useNavigation();
 	const [isLoading, setIsLoading] = useState(false);
+
+	const toast = useToast();
 
 	useFocusEffect(
 		useCallback(() => {
@@ -26,10 +28,10 @@ export function Polls() {
 				})
 				.catch(error => {
 					if (error.response?.data?.message) {
-						return toast(error.response.data.message);
+						return toast.show(getToastMessage(error.response.data.message));
 					}
 
-					toast("Não foi possível obter seus bolões");
+					toast.show(getToastMessage("Não foi possível obter seus bolões"));
 				})
 				.finally(() => {
 					setIsLoading(false);

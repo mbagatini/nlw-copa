@@ -9,7 +9,6 @@ import { Loading } from "../components/Loading";
 import { Option } from "../components/Option";
 import { PoolPros } from "../components/PoolCard";
 import { PoolHeader } from "../components/PoolHeader";
-import { toast } from "../hooks/useToast";
 import { api } from "../services/api";
 import { Guesses } from "../components/Guesses";
 
