@@ -1,14 +1,14 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { FlatList, Icon, useToast, VStack } from "native-base";
 import { Octicons } from "@expo/vector-icons";
-import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { FlatList, Icon, useToast, VStack } from "native-base";
+import React, { useCallback, useState } from "react";
 
-import { api } from "../services/api";
 import { Button } from "../components/Button";
-import { Header } from "../components/Header";
 import { EmptyPoolList } from "../components/EmptyPoolList";
-import { PoolPros, PoolCard } from "../components/PoolCard";
+import { Header } from "../components/Header";
 import { Loading } from "../components/Loading";
+import { PoolCard, PoolPros } from "../components/PoolCard";
+import { api } from "../services/api";
 import { getToastMessage } from "../utils/useToast";
 
 export function Polls() {
@@ -43,13 +43,15 @@ export function Polls() {
 		<VStack flex={1} bgColor="gray.900">
 			<Header title="Meus bolões" />
 
-			<VStack mt={6} mx={5} p={7} pb={4} mb={4} borderBottomWidth={1} borderBottomColor="gray.600">
-				<Button
-					leftIcon={<Icon as={Octicons} color="black" size="md" />}
-					onPress={() => navigate('find')}
-				>
-					BUSCAR BOLÃO POR CÓDIGO
-				</Button>
+			<VStack p={7}>
+				<VStack pb={4} mb={4} borderBottomWidth={1} borderBottomColor="gray.600">
+					<Button
+						leftIcon={<Icon as={Octicons} name="search" color="black" size="md" />}
+						onPress={() => navigate('find')}
+					>
+						BUSCAR BOLÃO POR CÓDIGO
+					</Button>
+				</VStack>
 
 				{isLoading ? (
 					<Loading />

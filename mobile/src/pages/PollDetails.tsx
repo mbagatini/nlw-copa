@@ -1,21 +1,24 @@
-import React, { useEffect, useState } from "react";
 import { useRoute } from "@react-navigation/native";
-import { HStack, VStack } from "native-base";
+import { HStack, useToast, VStack } from "native-base";
+import React, { useEffect, useState } from "react";
 import { Share } from "react-native";
 
 import { EmptyMyPoolList } from "../components/EmptyMyPoolList";
+import { Guesses } from "../components/Guesses";
 import { Header } from "../components/Header";
 import { Loading } from "../components/Loading";
 import { Option } from "../components/Option";
 import { PoolPros } from "../components/PoolCard";
 import { PoolHeader } from "../components/PoolHeader";
 import { api } from "../services/api";
-import { Guesses } from "../components/Guesses";
+import { getToastMessage } from "../utils/useToast";
 
 export function PollDetails() {
 	const [poll, setPoll] = useState<PoolPros>({} as PoolPros);
 	const [isLoading, setIsLoading] = useState(false);
 	const [optionSelected, setOptionSelected] = useState<'guesses' | 'ranking'>('guesses');
+
+	const toast = useToast();
 
 	const route = useRoute();
 	const { id } = route.params as { id: string }
@@ -35,10 +38,10 @@ export function PollDetails() {
 			})
 			.catch(error => {
 				if (error.response?.data?.message) {
-					return toast(error.response.data.message);
+					return toast.show(getToastMessage(error.response.data.message));
 				}
 
-				toast("Não foi possível obter seus bolões");
+				toast.show(getToastMessage("Não foi possível obter seus bolões"));
 			})
 			.finally(() => {
 				setIsLoading(false);
@@ -53,26 +56,28 @@ export function PollDetails() {
 		<VStack flex={1} bgColor="gray.900">
 			<Header title={poll.title} showBackButton showShareButton onShare={handlePollCodeShare} />
 
-			{poll._count?.participants == 0 ? (
-				<EmptyMyPoolList code={poll.code} />
-			) : (
-				<VStack mt={8} mx={5} alignItems="center" p={7}>
-					<PoolHeader data={poll} />
+			<VStack alignItems="center" px={7}>
+				{poll._count?.participants == 0 ? (
+					<EmptyMyPoolList code={poll.code} />
+				) : (
+					<VStack>
+						<PoolHeader data={poll} />
 
-					<HStack>
-						<Option title="Seus palpites"
-							isSelected={optionSelected == 'guesses'}
-							onPress={() => setOptionSelected('guesses')}
-						/>
-						<Option title="Ranking do grupo"
-							isSelected={optionSelected == 'ranking'}
-							onPress={() => setOptionSelected('ranking')}
-						/>
-					</HStack>
+						<HStack rounded="sm" mb={8} bgColor="gray.800">
+							<Option title="Seus palpites"
+								isSelected={optionSelected == 'guesses'}
+								onPress={() => setOptionSelected('guesses')}
+							/>
+							<Option title="Ranking do grupo"
+								isSelected={optionSelected == 'ranking'}
+								onPress={() => setOptionSelected('ranking')}
+							/>
+						</HStack>
 
-					<Guesses poolId={poll.id} code={poll.code} />
-				</VStack>
-			)}
+						<Guesses poolId={poll.id} code={poll.code} />
+					</VStack>
+				)}
+			</VStack>
 		</VStack>
 	)
 

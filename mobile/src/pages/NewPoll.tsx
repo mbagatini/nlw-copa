@@ -36,7 +36,7 @@ export function NewPoll() {
 		<VStack flex={1} bgColor="gray.900">
 			<Header title="Criar novo bolão" />
 
-			<VStack mt={8} mx={5} alignItems="center" p={7}>
+			<VStack mt={8} alignItems="center" p={7}>
 				<LogoImg />
 
 				<Heading fontFamily="heading" color="white" fontSize="xl" my={8} textAlign="center">
