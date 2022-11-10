@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
 import { FlatList, useToast } from 'native-base';
+import React, { useCallback, useEffect, useState } from "react";
 
 import { api } from "../services/api";
+import { getToastMessage } from "../utils/useToast";
+import { EmptyMyPoolList } from "./EmptyMyPoolList";
 import { Game, GameProps } from "./Game";
 import { Loading } from "./Loading";
-import { EmptyMyPoolList } from "./EmptyMyPoolList";
-import { getToastMessage } from "../utils/useToast";
 
 interface Props {
 	poolId: string;
@@ -26,12 +26,14 @@ export function Guesses({ poolId, code }: Props) {
 		}
 
 		try {
-			await api.post(`/polls/${poolId}/games/${gameId}`, {
+			await api.post(`/polls/${poolId}/games/${gameId}/guess`, {
 				firstTeamPoints: Number(firstTeamPoints),
 				secondTeamPoints: Number(secondTeamPoints)
 			});
 
 			toast.show(getToastMessage("Palpite criado com sucesso"));
+
+			fetchGames();
 		} catch (error) {
 			if (error.response?.data?.message) {
 				return toast.show(getToastMessage(error.response.data.message));
@@ -41,12 +43,19 @@ export function Guesses({ poolId, code }: Props) {
 		}
 	}
 
-	useEffect(() => {
+	const fetchGames = useCallback(async () => {
 		setIsLoading(true);
 
 		api.get(`/polls/${poolId}/games`)
 			.then(response => {
-				setGames(response.data.games);
+				const games = response.data.games.map(game => {
+					return {
+						...game,
+						date: Date.parse(game.date)
+					}
+				});
+
+				setGames(games);
 			})
 			.catch(error => {
 				if (error.response?.data?.message) {
@@ -58,6 +67,10 @@ export function Guesses({ poolId, code }: Props) {
 			.finally(() => {
 				setIsLoading(false);
 			})
+	}, []);
+
+	useEffect(() => {
+		fetchGames();
 	}, [poolId])
 
 	if (isLoading) {

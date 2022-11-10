@@ -3,6 +3,7 @@ import { X, Check } from 'phosphor-react-native';
 import { getName } from 'country-list';
 
 import { Team } from './Team';
+import { useState } from 'react';
 
 interface GuessProps {
 	id: string;
@@ -23,13 +24,21 @@ export interface GameProps {
 
 interface Props {
 	data: GameProps;
-	onGuessConfirm: () => void;
+	onGuessConfirm: () => Promise<void>;
 	setFirstTeamPoints: (value: string) => void;
 	setSecondTeamPoints: (value: string) => void;
 };
 
 export function Game({ data, setFirstTeamPoints, setSecondTeamPoints, onGuessConfirm }: Props) {
+	const [isLoading, setIsLoading] = useState(false);
 	const { colors, sizes } = useTheme();
+
+	function handleGuessConfirm() {
+		setIsLoading(true);
+		onGuessConfirm().finally(() => {
+			setIsLoading(false);
+		})
+	}
 
 	return (
 		<VStack
@@ -55,6 +64,7 @@ export function Game({ data, setFirstTeamPoints, setSecondTeamPoints, onGuessCon
 				<Team
 					code={data.firstTeamCountryCode}
 					position="right"
+					value={data.guess?.firstTeamPoints.toString()}
 					onChangeText={setFirstTeamPoints}
 				/>
 
@@ -63,13 +73,17 @@ export function Game({ data, setFirstTeamPoints, setSecondTeamPoints, onGuessCon
 				<Team
 					code={data.secondTeamCountryCode}
 					position="left"
+					value={data.guess?.secondTeamPoints.toString()}
 					onChangeText={setSecondTeamPoints}
 				/>
 			</HStack>
 
-			{
-				!data.guess &&
-				<Button size="xs" w="full" bgColor="green.500" mt={4} onPress={onGuessConfirm}>
+			{!data.guess && (
+				<Button size="xs" w="full" bgColor="green.500" mt={4}
+					onPress={handleGuessConfirm}
+					isLoading={isLoading}
+					_loading={{ _spinner: { color: "white" } }}
+				>
 					<HStack alignItems="center">
 						<Text color="white" fontSize="xs" fontFamily="heading" mr={3}>
 							CONFIRMAR PALPITE
@@ -78,7 +92,15 @@ export function Game({ data, setFirstTeamPoints, setSecondTeamPoints, onGuessCon
 						<Check color={colors.white} size={sizes[4]} />
 					</HStack>
 				</Button>
-			}
+			)}
+
+			{data.date < new Date() && (
+				<Button size="xs" w="full" bgColor="gray.600" mt={4}>
+					<Text color="gray.300" fontSize="xs" fontFamily="heading" mr={3}>
+						TEMPO ESGOTADO
+					</Text>
+				</Button>
+			)}
 		</VStack>
 	);
 }
