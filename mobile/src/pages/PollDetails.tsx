@@ -10,6 +10,7 @@ import { Loading } from "../components/Loading";
 import { Option } from "../components/Option";
 import { PoolPros } from "../components/PoolCard";
 import { PoolHeader } from "../components/PoolHeader";
+import { Ranking } from "../components/Ranking";
 import { api } from "../services/api";
 import { getToastMessage } from "../utils/useToast";
 
@@ -63,7 +64,7 @@ export function PollDetails() {
 					<EmptyMyPoolList code={poll.code} />
 				) : (
 					<VStack>
-						<HStack rounded="sm" mb={8} bgColor="gray.800">
+						<HStack width="100%" rounded="sm" mb={8} bgColor="gray.800">
 							<Option title="Seus palpites"
 								isSelected={optionSelected == 'guesses'}
 								onPress={() => setOptionSelected('guesses')}
@@ -74,7 +75,12 @@ export function PollDetails() {
 							/>
 						</HStack>
 
-						<Guesses poolId={poll.id} code={poll.code} />
+						{optionSelected == 'guesses' ? (
+							<Guesses poolId={poll.id} code={poll.code} />
+						) : (
+							<Ranking />
+						)}
+
 					</VStack>
 				)}
 			</VStack>
