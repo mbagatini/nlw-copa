@@ -32,6 +32,7 @@ export async function pollRoutes(fastify: FastifyInstance) {
 							id: true,
 							user: {
 								select: {
+									name: true,
 									avatarUrl: true
 								}
 							}
@@ -83,6 +84,7 @@ export async function pollRoutes(fastify: FastifyInstance) {
 								id: true,
 								user: {
 									select: {
+										name: true,
 										avatarUrl: true
 									}
 								}
