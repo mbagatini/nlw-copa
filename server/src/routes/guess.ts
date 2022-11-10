@@ -15,8 +15,8 @@ export async function guessRoutes(fastify: FastifyInstance) {
 		async (req, res) => {
 			// get body
 			const guessBody = z.object({
-				teamAPoints: z.number(),
-				teamBPoints: z.number(),
+				firstTeamPoints: z.number(),
+				secondTeamPoints: z.number(),
 			});
 
 			let guessData;
