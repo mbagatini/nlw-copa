@@ -51,11 +51,16 @@ export default function Home(props: HomeProps) {
 }
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
-	const [usersResponse, guessesResponse, poolsResponse] = await Promise.all([
-		api.get('/users/count'),
-		api.get('/guesses/count'),
-		api.get('/pools/count')
-	]);
+	const [
+		usersResponse,
+		guessesResponse,
+		poolsResponse
+	]
+		= await Promise.all([
+			api.get('/users/count'),
+			api.get('/guesses/count'),
+			api.get('/polls/count')
+		]);
 
 	return {
 		props: {
